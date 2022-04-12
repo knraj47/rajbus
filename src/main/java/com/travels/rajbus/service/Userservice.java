@@ -1,6 +1,8 @@
-package com.travels.rajbus;
+package com.travels.rajbus.service;
 
 import java.util.List;
+
+import com.travels.rajbus.entity.User;
 
 public interface Userservice {
 	

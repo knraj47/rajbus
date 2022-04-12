@@ -1,9 +1,12 @@
-package com.travels.rajbus;
+package com.travels.rajbus.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.travels.rajbus.entity.User;
+import com.travels.rajbus.repository.UserRepository;
 
 @Service
 public class Userserviceimpl  implements Userservice{

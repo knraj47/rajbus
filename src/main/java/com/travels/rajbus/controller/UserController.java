@@ -1,15 +1,8 @@
 package com.travels.rajbus.controller;
 
-import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.travels.rajbus.entity.User;
 import com.travels.rajbus.model.ServiceStatus;
-import com.travels.rajbus.model.User;
 import com.travels.rajbus.service.EmailSenderServiceImpl;
-import com.travels.rajbus.service.UserServiceImpl;
+import com.travels.rajbus.service.Userserviceimpl;
 
 @RestController
 @CrossOrigin("*")
 public class UserController {
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private Userserviceimpl userServiceImpl;
 	
 	@Autowired
     private EmailSenderServiceImpl emailSenderServiceImpl;

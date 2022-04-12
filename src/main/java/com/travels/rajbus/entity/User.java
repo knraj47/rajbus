@@ -1,4 +1,4 @@
-package com.travels.rajbus;
+package com.travels.rajbus.entity;
 
 
 import java.util.Objects;
