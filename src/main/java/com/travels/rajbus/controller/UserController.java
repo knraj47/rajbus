@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.travels.rajbus.entity.User;
 import com.travels.rajbus.model.ServiceStatus;
 import com.travels.rajbus.service.EmailSenderServiceImpl;
-import com.travels.rajbus.service.Userserviceimpl;
+import com.travels.rajbus.service.Userservice;
+
 
 @RestController
 @CrossOrigin("*")
 public class UserController {
 	
 	@Autowired
-	private Userserviceimpl userServiceImpl;
-	
+	private Userservice userService	;
 	@Autowired
     private EmailSenderServiceImpl emailSenderServiceImpl;
     
@@ -61,7 +61,7 @@ public class UserController {
 		
 		@PostMapping("/createUser")
 	public User createUser(@RequestBody User user) {
-		userServiceImpl.createUser(user);
+			userService.createUser(user);
 		return user;
 		
 	}
@@ -81,20 +81,20 @@ public class UserController {
 	@GetMapping("/getAllUsers")
 	public List<User> findAllStudents() {
 		
-		return (List<User>) userServiceImpl.getAllUsers();
+		return (List<User>) userService.getAllUsers();
 		
 	}
 	//updating student details
 	@PutMapping("/updateUser")
 	public User updateStudent(@RequestBody User user) {
 		
-		userServiceImpl.updateUser(user);
+		userService.updateUser(user);
 	    return user;
 	}
 	//delete student byId
 	@DeleteMapping("/deleteUser")
 	public String deleteUSer(@RequestParam Long id) {
-		userServiceImpl.deleteUser(id);
+		userService.deleteUser(id);
 		return "User has been deleted";
 		
 	}
