@@ -15,7 +15,7 @@ public interface Userservice {
 	
 	public void deleteUser(long id);
 
-	User getUserByEmail(String email);
+//	User getUserByEmail(String email);
 
 	ServiceStatus validator(String email, String password);
 

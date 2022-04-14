@@ -39,18 +39,19 @@ public class Userserviceimpl  implements Userservice{
 		userRepository.deleteById(id);
 	}
 
-	@Override
-	public User getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return userRepository.findByEmail(email);
-	}
+//	@Override
+//	public User getUserByEmail(String email) {
+//		// TODO Auto-generated method stub
+////		return userRepository.findByEmail(email);
+//	}
 	
 	@Override
 	public ServiceStatus validator(String email,String password) {
 		
 		    ServiceStatus serviceStatus = new ServiceStatus();
 		    if (email != null) {
-		    	    User user = userRepository.findByEmail(email);
+//		    	    User user = userRepository.findByEmail(email);
+		    	User user = null;
 		    	    if (user !=null) {
 		    	    	String userPassword =user.getPassword();
 		    	    	if (userPassword !=null) {
