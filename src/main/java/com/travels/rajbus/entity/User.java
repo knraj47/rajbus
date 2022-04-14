@@ -23,7 +23,14 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
+	private String Gender;
 	
+	public String getGender() {
+		return Gender;
+	}
+	public void setGender(String gender) {
+		Gender = gender;
+	}
 	@Column(unique=true)
 	private String Email;
 	public long getId() {
@@ -71,7 +78,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
-				+ ", lastName=" + lastName +" ,phoneNumber=" + phoneNumber + ", Email=" + Email + "]";
+				+ ", Gender=" + Gender 	+ ", lastName=" + lastName +" ,phoneNumber=" + phoneNumber + ", Email=" + Email + "]";
 	}
 	public User(long id, String userName, String password, String firstName, String lastName, String phoneNumber,String email) {
 		
@@ -82,6 +89,7 @@ public class User {
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 		Email = email;
+		this.Gender=Gender;
 	}
 	public User() {
 		super();
@@ -89,7 +97,7 @@ public class User {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(Email, firstName, id, lastName, password,phoneNumber, userName);
+		return Objects.hash(Email, firstName, id, lastName,Gender, password,phoneNumber, userName);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -102,7 +110,7 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(Email, other.Email) && Objects.equals(firstName, other.firstName) && id == other.id
 				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)&& Objects.equals(phoneNumber, other.phoneNumber)
-				&& Objects.equals(userName, other.userName);
+				&& Objects.equals(userName, other.userName)	&& Objects.equals(Gender, other.Gender);
 	}
 
 	
