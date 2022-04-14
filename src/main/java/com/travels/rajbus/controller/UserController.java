@@ -21,12 +21,44 @@ import com.travels.rajbus.service.Userservice;
 @RestController
 @CrossOrigin("*")
 public class UserController {
-	
-	@Autowired
-	private Userservice userService	;
+		
 	@Autowired
     private EmailSenderServiceImpl emailSenderServiceImpl;
-    
+
+	@Autowired
+	private Userservice userService;
+	
+	@PostMapping("/createUser")
+	public User createUser(@RequestBody User user) {
+			userService.createUser(user);
+		return user;
+		
+	}
+	
+	@PostMapping("/login")
+	public ServiceStatus validateUser(@RequestParam String username, @RequestParam String password) {
+		ServiceStatus serviceStatus = new ServiceStatus();
+		try {
+//			   if (username != null && password != null) {
+//				   serviceStatus.setStatus("failure");
+//				   serviceStatus.setMesaage("username cannot be empty");
+//			   } else {
+//				   serviceStatus.setStatus("failure");
+//				   serviceStatus.setMesaage("password cannot be empty");
+//			   }
+			serviceStatus = userService.validator(username, password);
+//			serviceStatus.setResult("succesfully");
+    		serviceStatus.setStatus("rajbus sucess");
+    		serviceStatus.setMesaage("rajbus Login Successfully");
+    		serviceStatus.setResult(" Successfully");
+    		return serviceStatus;
+		} catch (Exception e) {
+			e.printStackTrace();
+			serviceStatus.setStatus("failure");
+			serviceStatus.setMesaage(e.getMessage());
+		}
+		return serviceStatus;
+	}
 //	@EventListener(ApplicationReadyEvent.class)
 //	//@PostMapping(value="/requestOtp/{Email}")
 //	public void sendMail() throws MailException{
@@ -57,14 +89,6 @@ public class UserController {
 		return serviceStatus;
 	}
 
-			
-		
-		@PostMapping("/createUser")
-	public User createUser(@RequestBody User user) {
-			userService.createUser(user);
-		return user;
-		
-	}
 
 //	@GetMapping("/getUserByName")
 //	public List<User> findUserByName(@RequestParam String userName) {
@@ -98,4 +122,5 @@ public class UserController {
 		return "User has been deleted";
 		
 	}
+
 }

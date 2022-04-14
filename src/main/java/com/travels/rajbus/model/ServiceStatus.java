@@ -4,7 +4,8 @@ public class ServiceStatus {
 	
 	private String mesaage;
 	private String status;
-	
+	private String result;
+
 	public String getMesaage() {
 		return mesaage;
 	}
@@ -16,6 +17,13 @@ public class ServiceStatus {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
 	}
 
 }
