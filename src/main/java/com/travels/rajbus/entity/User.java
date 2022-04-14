@@ -80,7 +80,7 @@ public class User {
 		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
 				+ ", Gender=" + Gender 	+ ", lastName=" + lastName +" ,phoneNumber=" + phoneNumber + ", Email=" + Email + "]";
 	}
-	public User(long id, String userName, String password, String firstName, String lastName, String phoneNumber,String email) {
+	public User(long id, String userName, String password, String firstName, String lastName, String phoneNumber,String email, String gender) {
 		
 		this.id = id;
 		this.userName = userName;
@@ -89,7 +89,7 @@ public class User {
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 		Email = email;
-		this.Gender=Gender;
+		this.Gender= gender;
 	}
 	public User() {
 		super();

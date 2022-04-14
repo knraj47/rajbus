@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travels.rajbus.entity.User;
+import com.travels.rajbus.model.ServiceStatus;
 import com.travels.rajbus.repository.UserRepository;
 
 @Service
@@ -37,6 +38,39 @@ public class Userserviceimpl  implements Userservice{
 		// TODO Auto-generated method stub
 		userRepository.deleteById(id);
 	}
-}
 
+	@Override
+	public User getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepository.findByEmail(email);
+	}
+	
+	@Override
+	public ServiceStatus validator(String email,String password) {
+		
+		    ServiceStatus serviceStatus = new ServiceStatus();
+		    if (email != null) {
+		    	    User user = userRepository.findByEmail(email);
+		    	    if (user !=null) {
+		    	    	String userPassword =user.getPassword();
+		    	    	if (userPassword !=null) {
+		    	    		serviceStatus.setResult("succesfully");
+		    	    		serviceStatus.setStatus("rajbus sucess");
+		    	    		serviceStatus.setMesaage("rajbus Login Successfully");
+		    	    		return serviceStatus;
+		    	    	} else {
+		    	    		   serviceStatus.setStatus("rajbus failure");
+		    	    		   serviceStatus.setMesaage("failed");
+		    	    		   return serviceStatus;
+		    	    	}
+		    	    	} else {
+		    	    		    serviceStatus.setStatus("failure");
+		    	    		    serviceStatus.setMesaage("failure");
+		    	    			return serviceStatus;
+		    	    		}
+		    	    		
+		    }
+			return serviceStatus;
+	}
+}
 
