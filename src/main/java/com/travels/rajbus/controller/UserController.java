@@ -95,21 +95,19 @@ public class UserController {
 //	}
 	// get all students
 	@GetMapping("/getAllUsers")
-	public List<User> findAllStudents() {
+	public List<User> findAllUsers() {
 
 		return (List<User>) userService.getAllUsers();
 
 	}
 
-	// updating student details
 	@PutMapping("/updateUser")
-	public User updateStudent(@RequestBody User user) {
+	public User updateUser(@RequestBody User user) {
 
 		userService.updateUser(user);
 		return user;
 	}
 
-	// delete student byId
 	@DeleteMapping("/deleteUser")
 	public String deleteUSer(@RequestParam Long id) {
 		userService.deleteUser(id);
