@@ -19,7 +19,7 @@ public class EmailSenderServiceImpl {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendSimpleEmail(String toEmail) {
+    public void sendSimpleEmail(String toEmail,String subject,String text) {
 //		Random r;
 		try {
 //			r = SecureRandom.getInstanceStrong();
@@ -30,13 +30,13 @@ public class EmailSenderServiceImpl {
 //					otpStr = "0" + otpStr;
 
 			//userOtpMap.put(toEmail, otp);
-			String otpStr= new DecimalFormat("000000").format(new Random().nextInt(999999));
+			//String otpStr= new DecimalFormat("000000").format(new Random().nextInt(999999));
 
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 			mailMessage.setTo(toEmail);
-			mailMessage.setSubject("Rajbus verification code");
-			mailMessage.setText("OTP for Rajbus: " + otpStr);
-			mailMessage.setFrom("mahendramahi414@gmail.com");
+			mailMessage.setSubject(subject);
+			mailMessage.setText(text);
+			mailMessage.setFrom("vishnuchinthala5462@gmail.com");
 			mailSender.send(mailMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
