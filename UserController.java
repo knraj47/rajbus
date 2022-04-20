@@ -17,56 +17,52 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travels.rajbus.entity.User;
+import com.travels.rajbus.model.SuccessFailure;
 import com.travels.rajbus.model.ServiceStatus;
 import com.travels.rajbus.service.EmailSenderServiceImpl;
+//import com.travels.rajbus.service.OtpVerification;
 import com.travels.rajbus.service.Userservice;
 
 
 @RestController
 @CrossOrigin("*")
 public class UserController {
-
+		
+	Map<String,String> userOtp = new HashMap<String,String>();
+	
 	@Autowired
-	private EmailSenderServiceImpl emailSenderServiceImpl;
+    private EmailSenderServiceImpl emailSenderServiceImpl;
 
 	@Autowired
 	private Userservice userService;
 	
-	Map<String,String> userOtp = new HashMap<String,String>();
-
-
+//	@Autowired
+//	private OtpVerification otpVerification;
+	
 	@PostMapping("/createUser")
 	public User createUser(@RequestBody User user) {
-		userService.createUser(user);
+			userService.createUser(user);
 		return user;
-
+		
 	}
-
-	@GetMapping("/login")
-	public ServiceStatus validateUser(@RequestParam String userName, @RequestParam String password) {
+	
+	@PostMapping("/login")
+	public ServiceStatus validateUser(@RequestParam String username, @RequestParam String password) {
 		ServiceStatus serviceStatus = new ServiceStatus();
 		try {
-
-			if (userName != null && !userName.isEmpty()) {
-				if (password != null && !password.isEmpty()) {
-					serviceStatus = userService.validator(userName, password);
-				} else {
-					serviceStatus.setStatus("failure");
-					serviceStatus.setMesaage("password cannot be empty or null");
-					serviceStatus.setStatus("failure");
-					serviceStatus.setMesaage("username cannot be empty or null");
-				}
-
-			}
-
-//	     	if (username != null && password != null) {
-//				serviceStatus.setStatus("sucess");
-//			} else {
-//				serviceStatus.setStatus("failure");
-//				serviceStatus.setMessage("password cannot be empty");
-//			}
-//		
-
+//			   if (username != null && password != null) {
+//				   serviceStatus.setStatus("failure");
+//				   serviceStatus.setMesaage("username cannot be empty");
+//			   } else {
+//				   serviceStatus.setStatus("failure");
+//				   serviceStatus.setMesaage("password cannot be empty");
+//			   }
+			serviceStatus = userService.validator(username, password);
+//			serviceStatus.setResult("succesfully");
+    		serviceStatus.setStatus("rajbus sucess");
+    		serviceStatus.setMesaage("rajbus Login Successfully");
+    		serviceStatus.setResult(" Successfully");
+    		return serviceStatus;
 		} catch (Exception e) {
 			e.printStackTrace();
 			serviceStatus.setStatus("failure");
@@ -87,7 +83,6 @@ public class UserController {
 //				"This email has attachment");
 //		System.out.println("Email delivered with OTP");
 //	}
-
 	@GetMapping(value = "/sendmail")
 	public ServiceStatus sendmail(@RequestParam("email") String email) {
 		ServiceStatus serviceStatus = new ServiceStatus();
@@ -98,23 +93,23 @@ public class UserController {
 		//String otpnum=otpStr;
 		try {
 			String toEmail=email;
-			String text="Rajbus verification code";
-			String subject="OTP for Rajbus login  :"+otpStr+" \n enjoy the journey";
+			String subject="Rajbus verification code";
+			String text="OTP for Rajbus login  :"+otpStr+" \n enjoy the journey";
 			emailSenderServiceImpl.sendSimpleEmail(email,subject,text);
-			serviceStatus.setStatus("SUCCESS");
-			serviceStatus.setMesaage("email sent successfully");
+			serviceStatus.setStatus(SuccessFailure.success);
+			serviceStatus.setMesaage("Email sent successfully");
 			serviceStatus.setResult("check your Email for OTP");
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			serviceStatus.setStatus("FAILURE");
+			serviceStatus.setStatus(SuccessFailure.failure);
 			serviceStatus.setMesaage("Failed to send mail");
 		}
 		return serviceStatus;
 	}
 
-	@PostMapping(path = "/verifyOtp")
+	@GetMapping(path = "/verifyOtp")
 	public ServiceStatus verifyOtp(@RequestParam String email,String otp) {
 		ServiceStatus serviceStatus = new ServiceStatus();
 		System.out.println(userOtp.get(email));
@@ -124,33 +119,15 @@ public class UserController {
 			   if (email!= null && otp != null && !email.isEmpty() && !otp.isEmpty())  {
 //				   if (!userOtp.isEmpty() && userOtp.containsKey(email)) {
 						if(otpSt.equals(otp)) {
-							serviceStatus.setMesaage("Valid Otp");
-							serviceStatus.setResult("sucesses");
+							serviceStatus.setMesaage(SuccessFailure.VALID_OTP);
+							serviceStatus.setResult(SuccessFailure.success);
 							serviceStatus.setStatus("logged into Rajbus");
 						}else {
-							serviceStatus.setMesaage("Invalid Otp");
-							serviceStatus.setResult("Failure");
+							serviceStatus.setMesaage(SuccessFailure.INVALID_OTP);
+							serviceStatus.setResult(SuccessFailure.failure);
 							serviceStatus.setStatus("Login Failed");
-						}
-//					}
-				   		//serviceStatus=otpVerification.verifyOTP(email, otp);
-//			 serviceStatus.setStatus("Sucesses");
-//				serviceStatus.setMesaage("otp entered sucessfully");
-			// String serverOtp = otp;
-			//if(email !=null && !(otp==null)) {
-			//boolean s=otp.equals(serverOtp);
-		//	System.out.println(s);
-				
-//			if(otp.equals(0)){
-//				String  serverOtp = otpVerification.getOtp(email);
-//				if(otp == serverOtp){
-//				otpVerification.clearOTP(email);
-//				}
-//			
-			   }else {
-				serviceStatus.setMesaage("Invalid Otp");
-				serviceStatus.setStatus("Failure");		
-			}
+						}					
+			   }
 		}
 		 catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -171,27 +148,26 @@ public class UserController {
 //		return (List<User>) userServiceImpl.findUserById(id);
 //		
 //	}
-	// get all students
+	//get all students
 	@GetMapping("/getAllUsers")
-	public List<User> findAllUsers() {
-
+	public List<User> findAllStudents() {
+		
 		return (List<User>) userService.getAllUsers();
-
+		
 	}
-
+	//updating student details
 	@PutMapping("/updateUser")
-	public User updateUser(@RequestBody User user) {
-
+	public User updateStudent(@RequestBody User user) {
+		
 		userService.updateUser(user);
-		return user;
-
+	    return user;
 	}
-
+	//delete student byId
 	@DeleteMapping("/deleteUser")
-	public String deleteUser(@RequestParam Long id) {
+	public String deleteUSer(@RequestParam Long id) {
 		userService.deleteUser(id);
 		return "User has been deleted";
-
+		
 	}
 
 }
