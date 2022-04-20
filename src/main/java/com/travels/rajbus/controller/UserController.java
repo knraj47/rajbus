@@ -1,15 +1,8 @@
 package com.travels.rajbus.controller;
 
-import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,34 +12,60 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.travels.rajbus.entity.User;
 import com.travels.rajbus.model.ServiceStatus;
-import com.travels.rajbus.model.User;
 import com.travels.rajbus.service.EmailSenderServiceImpl;
-import com.travels.rajbus.service.UserServiceImpl;
+import com.travels.rajbus.service.Userservice;
 
 @RestController
 @CrossOrigin("*")
 public class UserController {
-	
+
 	@Autowired
-	private UserServiceImpl userServiceImpl;
-	
+	private EmailSenderServiceImpl emailSenderServiceImpl;
+
 	@Autowired
-    private EmailSenderServiceImpl emailSenderServiceImpl;
-    
-//	@EventListener(ApplicationReadyEvent.class)
-//	//@PostMapping(value="/requestOtp/{Email}")
-//	public void sendMail() throws MailException{
-//		String otp= new DecimalFormat("0000").format(new Random().nextInt(9999));
-//
-//		emailSenderServiceImpl.sendSimpleEmail("mahendramahi414@gmail.com",
-//				"Hi ,\n"
-//				+ "welcome to ****Rajbus****"
-//				+ "It's your OTP to login  "+otp+" \n"
-//						+ "enjoy the traveeling with Rajbus",
-//				"This email has attachment");
-//		System.out.println("Email delivered with OTP");
-//	}
+	private Userservice userService;
+
+	@PostMapping("/createUser")
+	public User createUser(@RequestBody User user) {
+		userService.createUser(user);
+		return user;
+
+	}
+
+	@GetMapping("/login")
+	public ServiceStatus validateUser(@RequestParam String userName, @RequestParam String password) {
+		ServiceStatus serviceStatus = new ServiceStatus();
+		try {
+
+			if (userName != null && !userName.isEmpty()) {
+				if (password != null && !password.isEmpty()) {
+					serviceStatus = userService.validator(userName, password);
+				} else {
+					serviceStatus.setStatus("failure");
+					serviceStatus.setMesaage("password cannot be empty or null");
+					serviceStatus.setStatus("failure");
+					serviceStatus.setMesaage("username cannot be empty or null");
+				}
+
+			}
+
+//	     	if (username != null && password != null) {
+//				serviceStatus.setStatus("sucess");
+//			} else {
+//				serviceStatus.setStatus("failure");
+//				serviceStatus.setMessage("password cannot be empty");
+//			}
+//		
+		} catch (Exception e) {
+			e.printStackTrace();
+			serviceStatus.setStatus("failure");
+			serviceStatus.setMesaage(e.getMessage());
+		}
+		return serviceStatus;
+	}
+
 	@GetMapping(value = "/sendmail")
 	public ServiceStatus sendmail(@RequestParam("email") String email) {
 		ServiceStatus serviceStatus = new ServiceStatus();
@@ -54,23 +73,13 @@ public class UserController {
 			emailSenderServiceImpl.sendSimpleEmail(email);
 			serviceStatus.setStatus("SUCCESS");
 			serviceStatus.setMesaage("email sent successfully");
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			serviceStatus.setStatus("FAILURE");
 			serviceStatus.setMesaage("Failed to send mail");
 		}
 		return serviceStatus;
-	}
-
-			
-		
-		@PostMapping("/createUser")
-	public User createUser(@RequestBody User user) {
-		userServiceImpl.createUser(user);
-		return user;
-		
 	}
 
 //	@GetMapping("/getUserByName")
@@ -84,25 +93,28 @@ public class UserController {
 //		return (List<User>) userServiceImpl.findUserById(id);
 //		
 //	}
-	//get all students
+	// get all students
 	@GetMapping("/getAllUsers")
 	public List<User> findAllStudents() {
-		
-		return (List<User>) userServiceImpl.getAllUsers();
-		
+
+		return (List<User>) userService.getAllUsers();
+
 	}
-	//updating student details
+
+	// updating student details
 	@PutMapping("/updateUser")
 	public User updateStudent(@RequestBody User user) {
-		
-		userServiceImpl.updateUser(user);
-	    return user;
+
+		userService.updateUser(user);
+		return user;
 	}
-	//delete student byId
+
+	// delete student byId
 	@DeleteMapping("/deleteUser")
 	public String deleteUSer(@RequestParam Long id) {
-		userServiceImpl.deleteUser(id);
+		userService.deleteUser(id);
 		return "User has been deleted";
-		
+
 	}
+
 }
