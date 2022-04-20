@@ -17,41 +17,47 @@ import com.travels.rajbus.model.ServiceStatus;
 import com.travels.rajbus.service.EmailSenderServiceImpl;
 import com.travels.rajbus.service.Userservice;
 
-
 @RestController
 @CrossOrigin("*")
 public class UserController {
-		
+
 	@Autowired
-    private EmailSenderServiceImpl emailSenderServiceImpl;
+	private EmailSenderServiceImpl emailSenderServiceImpl;
 
 	@Autowired
 	private Userservice userService;
-	
+
 	@PostMapping("/createUser")
 	public User createUser(@RequestBody User user) {
-			userService.createUser(user);
+		userService.createUser(user);
 		return user;
-		
+
 	}
-	
-	@PostMapping("/login")
-	public ServiceStatus validateUser(@RequestParam String username, @RequestParam String password) {
+
+	@GetMapping("/login")
+	public ServiceStatus validateUser(@RequestParam String userName, @RequestParam String password) {
 		ServiceStatus serviceStatus = new ServiceStatus();
 		try {
-//			   if (username != null && password != null) {
-//				   serviceStatus.setStatus("failure");
-//				   serviceStatus.setMesaage("username cannot be empty");
-//			   } else {
-//				   serviceStatus.setStatus("failure");
-//				   serviceStatus.setMesaage("password cannot be empty");
-//			   }
-			serviceStatus = userService.validator(username, password);
-//			serviceStatus.setResult("succesfully");
-    		serviceStatus.setStatus("rajbus sucess");
-    		serviceStatus.setMesaage("rajbus Login Successfully");
-    		serviceStatus.setResult(" Successfully");
-    		return serviceStatus;
+
+			if (userName != null && !userName.isEmpty()) {
+				if (password != null && !password.isEmpty()) {
+					serviceStatus = userService.validator(userName, password);
+				} else {
+					serviceStatus.setStatus("failure");
+					serviceStatus.setMesaage("password cannot be empty or null");
+					serviceStatus.setStatus("failure");
+					serviceStatus.setMesaage("username cannot be empty or null");
+				}
+
+			}
+
+//	     	if (username != null && password != null) {
+//				serviceStatus.setStatus("sucess");
+//			} else {
+//				serviceStatus.setStatus("failure");
+//				serviceStatus.setMessage("password cannot be empty");
+//			}
+//		
 		} catch (Exception e) {
 			e.printStackTrace();
 			serviceStatus.setStatus("failure");
@@ -72,22 +78,6 @@ public class UserController {
 //				"This email has attachment");
 //		System.out.println("Email delivered with OTP");
 //	}
-	@GetMapping(value = "/sendmail")
-	public ServiceStatus sendmail(@RequestParam("email") String email) {
-		ServiceStatus serviceStatus = new ServiceStatus();
-		try {
-			emailSenderServiceImpl.sendSimpleEmail(email);
-			serviceStatus.setStatus("SUCCESS");
-			serviceStatus.setMesaage("email sent successfully");
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			serviceStatus.setStatus("FAILURE");
-			serviceStatus.setMesaage("Failed to send mail");
-		}
-		return serviceStatus;
-	}
 
 
 //	@GetMapping("/getUserByName")
@@ -101,26 +91,25 @@ public class UserController {
 //		return (List<User>) userServiceImpl.findUserById(id);
 //		
 //	}
-	//get all students
+	// get all students
 	@GetMapping("/getAllUsers")
-	public List<User> findAllStudents() {
-		
+	public List<User> findAllUsers() {
+
 		return (List<User>) userService.getAllUsers();
-		
-	}
-	//updating student details
-	@PutMapping("/updateUser")
-	public User updateStudent(@RequestBody User user) {
-		
-		userService.updateUser(user);
-	    return user;
-	}
-	//delete student byId
-	@DeleteMapping("/deleteUser")
-	public String deleteUSer(@RequestParam Long id) {
-		userService.deleteUser(id);
-		return "User has been deleted";
-		
+
 	}
 
+	@PutMapping("/updateUser")
+	public User updateUser(@RequestBody User user) {
+
+		userService.updateUser(user);
+		return user;
+	}
+
+	@DeleteMapping("/deleteUser")
+	public String deleteUser(@RequestParam Long id) {
+		userService.deleteUser(id);
+		return "User has been deleted";
+
+	}
 }

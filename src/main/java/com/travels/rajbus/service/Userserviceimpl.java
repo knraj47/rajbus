@@ -14,7 +14,6 @@ public class Userserviceimpl  implements Userservice{
 
 	@Autowired
 	private UserRepository userRepository;
-	
 	@Override
 	public User createUser(User user) {
 		// TODO Auto-generated method stub
@@ -44,34 +43,51 @@ public class Userserviceimpl  implements Userservice{
 //		// TODO Auto-generated method stub
 ////		return userRepository.findByEmail(email);
 //	}
-	
-	@Override
-	public ServiceStatus validator(String email,String password) {
-		
-		    ServiceStatus serviceStatus = new ServiceStatus();
-		    if (email != null) {
-//		    	    User user = userRepository.findByEmail(email);
-		    	User user = null;
-		    	    if (user !=null) {
-		    	    	String userPassword =user.getPassword();
-		    	    	if (userPassword !=null) {
-		    	    		serviceStatus.setResult("succesfully");
-		    	    		serviceStatus.setStatus("rajbus sucess");
-		    	    		serviceStatus.setMesaage("rajbus Login Successfully");
-		    	    		return serviceStatus;
-		    	    	} else {
-		    	    		   serviceStatus.setStatus("rajbus failure");
-		    	    		   serviceStatus.setMesaage("failed");
-		    	    		   return serviceStatus;
-		    	    	}
-		    	    	} else {
-		    	    		    serviceStatus.setStatus("failure");
-		    	    		    serviceStatus.setMesaage("failure");
-		    	    			return serviceStatus;
-		    	    		}
-		    	    		
-		    }
-			return serviceStatus;
+@Override
+	public User login(String userName, String Password) {
+		User user = userRepository.findByEmail(userName);
+		return user;
 	}
-}
 
+	public ServiceStatus validator(String userName,String password) {
+		
+	    ServiceStatus serviceStatus = new ServiceStatus();
+	    
+	    try {
+	    	if (userName != null) {
+			    User user=userRepository.findByEmail(userName);
+			    
+			    if (user !=null) {
+			    	String Password =user.getPassword();
+			    	if(Password.equals(password)) {
+			    		serviceStatus.setResult("succesfully");
+			    		serviceStatus.setStatus("rajbus sucess");
+			    		serviceStatus.setMesaage("rajbus Login Successfully");
+			    		return serviceStatus;
+			    
+			    	}else {
+		    		    serviceStatus.setStatus("failure");
+		    		    serviceStatus.setMesaage("invalid password");
+		    			return serviceStatus;
+		
+			    
+			    	}
+			    }else {
+//			    	logic for if user object is empty
+	    		    serviceStatus.setStatus("failure");
+	    		    serviceStatus.setMesaage("user not registered");
+	    			return serviceStatus;
+			    }
+	    	}
+	    }
+			    catch (Exception e) {
+			
+	    		e.printStackTrace();
+		}
+	    
+	    
+		return serviceStatus;
+	  
+	}
+
+}
