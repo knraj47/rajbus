@@ -6,8 +6,6 @@ import com.travels.rajbus.entity.User;
 import com.travels.rajbus.model.ServiceStatus;
 
 public interface Userservice {
-	
-//	Object user = null;
 
 	public User createUser(User user);
 	
@@ -17,10 +15,10 @@ public interface Userservice {
 	
 	public void deleteUser(long id);
 
-	User getUserByEmail(String email);
-
-	ServiceStatus validator(String email, String password);
-
+	User login(String userName, String Password);
+	public ServiceStatus validator(String userName, String password);
+	
+	public void resetPassword(String newPassword, String email) throws UserNotFoundException;
 
 }
 
