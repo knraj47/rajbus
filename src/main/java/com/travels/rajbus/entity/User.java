@@ -1,6 +1,5 @@
 package com.travels.rajbus.entity;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,9 +18,10 @@ public class User {
 	private String userName;
 	private String password;
 	private String firstName;
-	private String lastName;
+	private String  lastName;
 	private String phoneNumber;
 	private String gender;
+
 	@Column(unique = true)
 	private String email;
 
@@ -89,6 +89,7 @@ public class User {
 		this.email = email;
 	}
 
+	
 	public User() {
 		super();
 
